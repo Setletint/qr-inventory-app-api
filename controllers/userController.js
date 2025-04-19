@@ -1,6 +1,8 @@
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
 exports.getUser = async (req, res) => {
+  console.log(req.body);
   try {
     const userId = req.params.id;
 
@@ -24,8 +26,13 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
+  const { email, username } = req.body;
+  var plainPassword = req.body.password;
 
-  const { email, username, password } = req.body;
+  if (!verifyPassword(plainPassword)) {
+    // Bad Request
+    return res.status(400).json({message: 'Password doesn\'t meet minimum criteria'})
+  }
 
   if (!isEmail(email)) {
     // Bad Request
@@ -41,7 +48,9 @@ exports.createUser = async (req, res) => {
     return res.status(409).json({ message: 'User with this email or username already exists' });
   }
 
-  const user = await User.create(req.body);
+  const password = await bcrypt.hash(plainPassword, 10);
+
+  const user = await User.create({email, username, password});
   
   // Created
   res.status(201).json(user);
@@ -51,3 +60,8 @@ const isEmail = (value) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(value);
 };
+
+const verifyPassword = (value) => {
+  const passwordRegex = /^(?=.*\d).{6,}$/;
+  return passwordRegex.test(value);
+}
