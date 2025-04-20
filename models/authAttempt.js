@@ -8,6 +8,18 @@ class AuthAttemptModel extends BaseModel {
       { name: 'attempts', options: { type: Number, default: 1 } }
     ]);
   }
+
+  async lastAttemtpByIp(ip) {
+    return await this.model.findOne({ip: ip}, {}, {sort: { 'updatedAt' : -1}});
+  }
+
+  async updateAttemptsCount(id, updateCount) {
+    return await this.model.findByIdAndUpdate(id, {attempts: updateCount});
+  }
+
+  async clearAttempts(id) {
+    return await this.model.findByIdAndUpdate(id, {attempts: 0});
+  }
 }
 
 module.exports = new AuthAttemptModel();

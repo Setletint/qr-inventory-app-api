@@ -2,7 +2,6 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 exports.getUser = async (req, res) => {
-  console.log(req.body);
   try {
     const userId = req.params.id;
 
