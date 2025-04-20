@@ -12,6 +12,16 @@ class UserModel extends BaseModel {
     ]);
   }
 
+  async checkToken(userId, token) {
+    const checker = await this.model.findOne({_id: userId, token: token});
+
+    if (checker) {
+      return true;
+    }
+    
+    return false;
+  }
+
   async checkCredentials(email, password) {
     const account = await this.model.findOne({email: email});
     
