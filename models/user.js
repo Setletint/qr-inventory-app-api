@@ -12,29 +12,33 @@ class UserModel extends BaseModel {
     ]);
   }
 
+  async getUserByMail(email) {
+    return await this.model.findOne({ email: email });
+  }
+
   async checkToken(userId, token) {
-    const checker = await this.model.findOne({_id: userId, token: token});
+    const checker = await this.model.findOne({ _id: userId, token: token });
 
     if (checker) {
       return true;
     }
-    
+
     return false;
   }
 
   async checkCredentials(email, password) {
-    const account = await this.model.findOne({email: email});
-    
+    const account = await this.model.findOne({ email: email });
+
     if (account) {
       return await bcrypt.compare(password, account.password);
     }
-    
+
     return false;
   }
 
   async generateToken(email) {
     const token = crypto.randomBytes(32).toString('hex');;
-    await this.model.findOneAndUpdate({email: email}, {token: token});
+    await this.model.findOneAndUpdate({ email: email }, { token: token });
     return token;
   }
 }
