@@ -22,8 +22,9 @@ exports.login = async (req, res) => {
     if (attempts.attempts < 5) {
       if (await checkCredentials(req.body.email, req.body.password)) {
         const token = await user.generateToken(req.body.email);
+        const userId = await user.getUserIdByMail(req.body.email);
         // Ok
-        return res.status(200).json({message: 'Login success', token});
+        return res.status(200).json({message: 'Login success', token: token, userId: userId._id});
       } else {
         auth.updateAttemptsCount(attemptId, (attempts.attempts + 1));
         // Bad request
@@ -36,8 +37,9 @@ exports.login = async (req, res) => {
   } else {
     if (await checkCredentials(req.body.email, req.body.password)) {
       const token = await user.generateToken(req.body.email);
+      const userId = await user.getUserIdByMail(req.body.email);
       // OK
-      return res.status(200).json({message: 'Login success', token: token});
+      return res.status(200).json({message: 'Login success', token: token, userId: userId._id});
     } else {
       auth.create({ip: ip, email: req.body.email || ''});
       // Bad Request
@@ -47,6 +49,22 @@ exports.login = async (req, res) => {
   
   // Server Error
   return res.status(500).json({message: 'Something went wrong, try later.'})
+};
+
+exports.logout = async (req, res) => {
+  const userId = req.body.userId;
+  const token = req.body.token;
+
+  if (await user.checkToken(userId, token)) {
+
+    const logout = await user.deleteToken(userId, token);
+
+    // Ok
+    if (logout) return res.status(200).json({ message: 'Logout success' });
+  }
+  
+  // Bad request
+  return res.status(400).json({ message: 'Something went wrong'});
 };
 
 const checkCredentials = async (email, password) => {

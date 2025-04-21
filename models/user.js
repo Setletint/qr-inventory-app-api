@@ -8,15 +8,17 @@ class UserModel extends BaseModel {
       { name: 'username', options: { type: String, required: true, unique: true } },
       { name: 'email', options: { type: String, required: true, unique: true } },
       { name: 'password', options: { type: String, required: true } },
-      { name: 'token', options: { type: String } }
+      { name: 'token', options: { type: String, default: '' } }
     ]);
   }
 
-  async getUserByMail(email) {
-    return await this.model.findOne({ email: email });
+  async getUserIdByMail(email) {
+    return await this.model.findOne({ email: email }).select('_id');
   }
 
   async checkToken(userId, token) {
+    if (token == '') return false;
+
     const checker = await this.model.findOne({ _id: userId, token: token });
 
     if (checker) {
@@ -37,9 +39,28 @@ class UserModel extends BaseModel {
   }
 
   async generateToken(email) {
-    const token = crypto.randomBytes(32).toString('hex');;
+    let token;
+    let isDuplicate = true;
+
+    while (isDuplicate) {
+      token = crypto.randomBytes(32).toString('hex');
+      const existing = await this.model.findOne({ token: token });
+      if (!existing) {
+        isDuplicate = false;
+      }
+    }
+
     await this.model.findOneAndUpdate({ email: email }, { token: token });
     return token;
+  }
+
+  async deleteToken(userId, token) {
+
+    if (! await this.checkToken(userId, token)) {
+      return false;
+    }
+
+    return await this.update(userId, { token: '' });
   }
 }
 

@@ -17,7 +17,7 @@ exports.getUser = async (req, res) => {
     // Internal Server Error
     res.status(500).json({ message: 'Server error' });
   }
-}
+};
 
 exports.getAllUsers = async (req, res) => {
   const users = await User.findAll();
@@ -30,12 +30,12 @@ exports.createUser = async (req, res) => {
 
   if (!verifyPassword(plainPassword)) {
     // Bad Request
-    return res.status(400).json({message: 'Password doesn\'t meet minimum criteria'})
+    return res.status(400).json({ message: 'Password doesn\'t meet minimum criteria' })
   }
 
   if (!isEmail(email)) {
     // Bad Request
-    return res.status(400).json({message: 'Email is invalid'})
+    return res.status(400).json({ message: 'Email is invalid' })
   }
 
   const existingUser = await User.model.findOne({
@@ -49,8 +49,8 @@ exports.createUser = async (req, res) => {
 
   const password = await bcrypt.hash(plainPassword, 10);
 
-  const user = await User.create({email, username, password});
-  
+  const user = await User.create({ email, username, password });
+
   // Created
   res.status(201).json(user);
 };
