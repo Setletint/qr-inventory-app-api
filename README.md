@@ -20,6 +20,7 @@ md_content = """
     "userId": "<string>",
     "token": "<string>"
 }
+```
 
 ### `POST /api/item/create`
 **Body:**
@@ -32,3 +33,4 @@ md_content = """
     "callenderData": "<Object> || <String>",
     "content": "<Mixed>"
 }
+```
