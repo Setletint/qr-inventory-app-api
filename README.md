@@ -1,5 +1,3 @@
-# Create the content for the markdown file
-md_content = """
 ## 📦 Dependencies
 
 | Package | Link | Version |
