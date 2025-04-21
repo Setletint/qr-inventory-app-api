@@ -19,20 +19,15 @@ exports.getItemInfo = async (req, res) => {
     const userId = req.body.userId || '';
     const itemInfo = await Item.findById(itemId);
 
-
-    if (itemInfo.isPrivate) {
-
-    }
-
     if (itemInfo.owner == userId) {
 
-       if (! await User.checkToken(userId, req.body.token)) {
-        itemInfo = sanitizeInfo(itemInfo);
-        
-        return res.status(200).json({item: itemInfo});
-       }
+        if (await User.checkToken(userId, req.body.token)) {
+         return res.status(200).json({item: itemInfo});
+        }
+     }
 
-       return res.status(200).json({item: itemInfo});
+    if (itemInfo.isPrivate) {
+        // TODO: handle private item
     }
 
     itemInfo = sanitizeInfo(itemInfo);
