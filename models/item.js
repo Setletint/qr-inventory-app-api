@@ -8,8 +8,8 @@ class ItmeModel extends BaseModel {
       { name: 'owner', options: { type: String, required: true } },
       { name: 'qrCode', options: { type: String } },
       { name: 'isPrivate', options: { type: Boolean, default: false } },
-      { name: 'authorizedUsers', options: { type: String, default: '' } },
-      { name: 'authorizedCallenderUsers', options: { type: String, default: '' } },
+      { name: 'authorizedUsers', options: { type: [String], default: [] } },
+      { name: 'authorizedCallenderUsers', options: { type: [String], default: [] } },
       { name: 'callenderData', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
       { name: 'content', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
     ]);

@@ -6,12 +6,12 @@ exports.getOwnedItems = async (req, res) => {
 
     if (!(await User.checkToken(req.body.userId, req.body.token))) {
         // Forbidden
-        return res.status(403).json({message: 'User not authorized'});
+        return res.status(403).json({ message: 'User not authorized' });
     }
 
     const items = await Item.getItemsByOwner(req.body.userId);
     // Ok
-    return res.status(200).json({message: 'Ok' ,items: items });
+    return res.status(200).json({ message: 'Ok', items: items });
 };
 
 exports.getItemInfo = async (req, res) => {
@@ -22,23 +22,35 @@ exports.getItemInfo = async (req, res) => {
     if (itemInfo.owner == userId) {
 
         if (await User.checkToken(userId, req.body.token)) {
-         return res.status(200).json({item: itemInfo});
+            return res.status(200).json({ item: itemInfo });
         }
-     }
+    }
 
     if (itemInfo.isPrivate) {
-        // TODO: handle private item
+        if (userId == '') {
+            // Forbidden
+            return res.status(403).json({ message: 'User not authorized' });
+        }
+
+        localUser = await User.findById(userId);
+
+        if (itemInfo.includes(localUser.email)) {
+            itemInfo = sanitizeInfo(itemInfo);
+            return res.status(200).json({ item: itemInfo });
+        }
+        // Forbidden   
+        return res.status(403).json({ message: 'User not authorized' });
     }
 
     itemInfo = sanitizeInfo(itemInfo);
-    return res.status(200).json({item: itemInfo});
+    return res.status(200).json({ item: itemInfo });
 }
 
-exports.createItem = async (req,res) => {
+exports.createItem = async (req, res) => {
 
     if (!(await User.checkToken(req.body.userId, req.body.token))) {
         // Forbidden
-        return res.status(403).json({message: 'User not authorized'});
+        return res.status(403).json({ message: 'User not authorized' });
     }
 
     const newItem = await Item.create({
@@ -49,7 +61,7 @@ exports.createItem = async (req,res) => {
         content: req.body.content
     });
 
-    res.status(200).json({message: 'New item created'});
+    res.status(200).json({ message: 'New item created' });
 }
 
 const sanitizeInfo = (info) => {
