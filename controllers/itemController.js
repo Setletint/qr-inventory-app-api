@@ -17,34 +17,43 @@ exports.getOwnedItems = async (req, res) => {
 exports.getItemInfo = async (req, res) => {
     const itemId = req.params.id;
     const userId = req.body.userId || '';
-    const itemInfo = await Item.findById(itemId);
+    let itemInfo = await Item.findById(itemId);
 
-    if (itemInfo.owner == userId) {
+    if (!itemInfo) {
+        // Not Found
+        return res.status(404).json({ message: 'Item not found' });
+    }
 
-        if (await User.checkToken(userId, req.body.token)) {
-            return res.status(200).json({ item: itemInfo });
-        }
+    const isOwner = itemInfo.owner == userId;
+    const isTokenValid = await User.checkToken(userId, req.body.token);
+
+    if (isOwner && isTokenValid) {
+        // Ok
+        return res.status(200).json({ item: itemInfo });
     }
 
     if (itemInfo.isPrivate) {
-        if (userId == '') {
+        if (!userId) {
             // Forbidden
             return res.status(403).json({ message: 'User not authorized' });
         }
 
-        localUser = await User.findById(userId);
+        const localUser = await User.findById(userId);
 
-        if (itemInfo.includes(localUser.email)) {
-            itemInfo = sanitizeInfo(itemInfo);
-            return res.status(200).json({ item: itemInfo });
+        if (localUser && itemInfo.includes(localUser.email) && isTokenValid) {
+            const sanitized = sanitizeInfo(itemInfo);
+            // Ok
+            return res.status(200).json({ item: sanitized });
         }
-        // Forbidden   
+        // Forbidden
         return res.status(403).json({ message: 'User not authorized' });
     }
 
-    itemInfo = sanitizeInfo(itemInfo);
-    return res.status(200).json({ item: itemInfo });
-}
+    const sanitized = sanitizeInfo(itemInfo);
+    // Ok
+    return res.status(200).json({ item: sanitized });
+};
+
 
 exports.createItem = async (req, res) => {
 
@@ -61,6 +70,7 @@ exports.createItem = async (req, res) => {
         content: req.body.content
     });
 
+    // Ok
     res.status(200).json({ message: 'New item created' });
 }
 
