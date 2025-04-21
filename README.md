@@ -34,3 +34,34 @@ md_content = """
     "content": "<Mixed>"
 }
 ```
+
+### `POST /api/auth/login`
+**Body:**
+```json
+{
+  "email": "<string>",
+  "password": "<string>"
+}
+```
+
+
+### `POST /api/auth/logout`
+**Body:**
+```json
+{
+  "email": "<string>",
+  "password": "<string>"
+}
+```
+
+
+
+### `POST /api/user/register`
+**Body:**
+```json
+{
+  "email": "<string>",
+  "username": "<string>",
+  "password": "<string>"
+}
+```
