@@ -79,6 +79,35 @@ exports.createItem = async (req, res) => {
     res.status(200).json({ message: 'New item created' });
 }
 
+exports.updateAuthorizedUsers = async (req, res) => {
+    const itemId = req.params.id;
+    const userId = req.body.userId || '';
+    let itemInfo = await Item.findById(itemId);
+    let isForCallender = !!req.body.forCalender;
+
+    if (!Array.isArray(req.body.authorizedUsers)) {
+        // Bad Request
+        return res.status(400).json({ message: 'authorizedUsers was set incorectly. Check endpoint README.md' });
+    }
+
+    if (!itemInfo) {
+        // Not Found
+        return res.status(404).json({ message: 'Item not found' });
+    }
+
+    const isOwner = itemInfo.owner == userId;
+    const isTokenValid = await User.checkToken(userId, req.body.token);
+
+    if (isOwner && isTokenValid) {
+        if (isForCallender) {
+            await Item.model.findByIdAndUpdate(itemId, {authorizedCallenderUsers: req.body.authorizedUsers});
+            return res.status(200).json({message: "Authorized Callender users was updated"});
+        }
+        await Item.model.findByIdAndUpdate(itemId, {authorizedUsers: req.body.authorizedUsers});
+        return res.status(200).json({message: "Authorized users was updated"});
+    }
+};
+
 const sanitizeInfo = (info) => {
     info.owner = '';
     info.callenderData = '';
