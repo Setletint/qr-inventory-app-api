@@ -9,7 +9,7 @@ function sanitize(obj) {
             !key.startsWith('$') &&
             !key.includes('.')
         ) {
-            clean[key] = sanitize(obj[key]); // Recursively sanitize
+            clean[key] = sanitize(obj[key]);
         }
     }
 

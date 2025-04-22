@@ -1,5 +1,5 @@
-const auth = require('../models/authAttempt');
-const user = require('../models/user')
+const Auth = require('../models/AuthAttempt');
+const User = require('../models/user')
 const bcrypt = require('bcrypt');
 
 const LOGIN_COOLDOWN = 1;
@@ -7,7 +7,7 @@ const LOGIN_COOLDOWN = 1;
 exports.login = async (req, res) => {
   const ip = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress;
 
-  attempts = await auth.lastAttemtpByIp(ip);
+  attempts = await Auth.lastAttemtpByIp(ip);
   const attemptId = attempts._id.toHexString();
 
   if (attempts) {
@@ -16,17 +16,17 @@ exports.login = async (req, res) => {
     const currentTime = new Date();
     
     if (((Math.abs(currentTime - lastAttempt) / (1000 * 60) ) < LOGIN_COOLDOWN )) {
-      auth.clearAttempts(attemptId);
+      Auth.clearAttempts(attemptId);
     }
 
     if (attempts.attempts < 5) {
       if (await checkCredentials(req.body.email, req.body.password)) {
-        const token = await user.generateToken(req.body.email);
-        const userId = await user.getUserIdByMail(req.body.email);
+        const token = await User.generateToken(req.body.email);
+        const userId = await User.getUserIdByMail(req.body.email);
         // Ok
         return res.status(200).json({message: 'Login success', token: token, userId: userId._id});
       } else {
-        auth.updateAttemptsCount(attemptId, (attempts.attempts + 1));
+        Auth.updateAttemptsCount(attemptId, (attempts.attempts + 1));
         // Bad request
         return res.status(400).json({message: 'Incorect credentials'});
       }
@@ -36,12 +36,12 @@ exports.login = async (req, res) => {
     }
   } else {
     if (await checkCredentials(req.body.email, req.body.password)) {
-      const token = await user.generateToken(req.body.email);
-      const userId = await user.getUserIdByMail(req.body.email);
+      const token = await User.generateToken(req.body.email);
+      const userId = await User.getUserIdByMail(req.body.email);
       // OK
       return res.status(200).json({message: 'Login success', token: token, userId: userId._id});
     } else {
-      auth.create({ip: ip, email: req.body.email || ''});
+      Auth.create({ip: ip, email: req.body.email || ''});
       // Bad Request
       return res.status(400).json({message: 'Incorect credentials'});
     }
@@ -55,9 +55,9 @@ exports.logout = async (req, res) => {
   const userId = req.body.userId;
   const token = req.body.token;
 
-  if (await user.checkToken(userId, token)) {
+  if (await User.checkToken(userId, token)) {
 
-    const logout = await user.deleteToken(userId, token);
+    const logout = await User.deleteToken(userId, token);
 
     // Ok
     if (logout) return res.status(200).json({ message: 'Logout success' });
@@ -68,5 +68,5 @@ exports.logout = async (req, res) => {
 };
 
 const checkCredentials = async (email, password) => {
-  return await user.checkCredentials(email, password);
+  return await User.checkCredentials(email, password);
 }

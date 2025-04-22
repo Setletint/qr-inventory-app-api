@@ -12,6 +12,8 @@ app.use(express.json());
 connectDB();
 
 app.use(express.json());
+
+// Sanitize incoming data
 app.use(sanitizeMiddleware);
 
 // User

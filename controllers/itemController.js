@@ -1,6 +1,11 @@
 const Item = require('../models/item');
 const User = require('../models/user');
+const QrCode = require('qrcode');
 
+exports.getQrCode = async (req, res) => {
+    // Generate QrCode for current item
+    // Item will be set through param /:id
+};
 
 exports.getOwnedItems = async (req, res) => {
 
