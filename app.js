@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDB = require('./db/connect');
+const {sanitizeMiddleware} = require('./tools/tools');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const itemRoutes = require('./routes/itemRoutes');
@@ -9,6 +10,9 @@ app.use(express.json());
 //app.set('trust proxy', true);
 
 connectDB();
+
+app.use(express.json());
+app.use(sanitizeMiddleware);
 
 // User
 app.use('/api/user', userRoutes);
