@@ -1,3 +1,7 @@
+// Dotenv init
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const connectDB = require('./db/connect');
 const {sanitizeMiddleware} = require('./tools/tools');

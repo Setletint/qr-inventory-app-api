@@ -11,7 +11,6 @@ router.post('/:id', controller.getItemInfo);
 // Get items user own
 router.post('/getItems', controller.getOwnedItems);
 
-// Create new item
 router.post('/create', controller.createItem);
 
 // Set Authorized users (for callender aswell)

@@ -3,8 +3,35 @@ const User = require('../models/user');
 const QrCode = require('qrcode');
 
 exports.getQrCode = async (req, res) => {
-    // Generate QrCode for current item
-    // Item will be set through param /:id
+    exports.getQrCode = async (req, res) => {
+        const itemId = req.params.id;
+        const userId = req.body.userId || '';
+
+        const item = await Item.findById(itemId);
+    
+        if (!item) {
+            // Not Found
+            return res.status(404).json({ message: 'Item not found' });
+        }
+    
+        const isOwner = item.owner == userId;
+        const isTokenValid = await User.checkToken(userId, req.body.token);
+    
+        if (!isOwner || !isTokenValid) {
+            // Forbidden
+            return res.status(403).json({ message: 'User not authorized' });
+        }
+    
+        try {
+            const qrData = `${process.env.FRONT_DOMAIN}/${process.env.FRONT_ITEM_ROUTE}/${itemId}`;
+            const qrCode = await QrCode.toDataURL(qrData);
+            // Ok
+            return res.status(200).json({ qrCode });
+        } catch (err) {
+            // Internal Server Error
+            return res.status(500).json({ message: 'Failed to generate QR code', error: err.message });
+        }
+    };
 };
 
 exports.getOwnedItems = async (req, res) => {
