@@ -12,7 +12,7 @@
 
 ## 🌐 API Endpoints
 
-### `POST /api/item/:id`
+- ### `POST /api/item/:id`
 **Body:**
 ```json
 {
@@ -21,9 +21,9 @@
 }
 ```
 
-### `GET /api/item/getQrCode/:id`
+- ### `GET /api/item/getQrCode/:id`
 
-### `POST /api/item/getItems`
+- ### `POST /api/item/getItems`
 **Body:**
 ```json
 {
@@ -32,7 +32,7 @@
 }
 ```
 
-### `POST /api/item/create`
+- ### `POST /api/item/create`
 **Body:**
 ```json
 {
@@ -45,7 +45,7 @@
 }
 ```
 
-### `POST /api/item/setAuthorizedUsers/:id`
+- ### `POST /api/item/setAuthorizedUsers/:id`
 **Body:**
 ```json
 {
@@ -56,7 +56,7 @@
 }
 ```
 
-### `POST /api/auth/login`
+- ### `POST /api/auth/login`
 **Body:**
 ```json
 {
@@ -66,7 +66,7 @@
 ```
 
 
-### `POST /api/auth/logout`
+- ### `POST /api/auth/logout`
 **Body:**
 ```json
 {
@@ -77,7 +77,7 @@
 
 
 
-### `POST /api/user/register`
+- ### `POST /api/user/register`
 **Body:**
 ```json
 {
