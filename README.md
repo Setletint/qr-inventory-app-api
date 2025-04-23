@@ -21,6 +21,8 @@
 }
 ```
 
+### `GET /api/item/getQrCode/:id`
+
 ### `POST /api/item/getItems`
 **Body:**
 ```json
