@@ -2,7 +2,7 @@ const Auth = require('../models/AuthAttempt');
 const User = require('../models/user')
 const bcrypt = require('bcrypt');
 
-const LOGIN_COOLDOWN = 1;
+const LOGIN_COOLDOWN = process.env.LOGIN_COOLDOWN || 10;
 
 exports.login = async (req, res) => {
   const ip = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress;
