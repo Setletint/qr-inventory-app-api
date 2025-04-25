@@ -6,7 +6,7 @@ const controller = require('../controllers/itemController');
 //router.get('/:id', controller.getUser);
 
 // Get item by id
-router.post('/:id', controller.getItemInfo);
+router.post('get/:id', controller.getItemInfo);
 
 // Get item qrCode
 router.get('/getQrCode/:id', controller.getQrCode);
