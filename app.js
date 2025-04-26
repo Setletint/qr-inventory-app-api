@@ -2,6 +2,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+const cors = require('cors');
+
+//import cors from 'cors';
 const express = require('express');
 const connectDB = require('./db/connect');
 const {sanitizeMiddleware} = require('./tools/tools');
@@ -14,6 +17,11 @@ app.use(express.json());
 //app.set('trust proxy', true);
 
 connectDB();
+
+app.use(cors({
+    origin: process.env.FRONT_DOMAIN,
+    credentials: true
+}));
 
 app.use(express.json());
 
