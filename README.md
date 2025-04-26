@@ -6,6 +6,7 @@
 | ![qrcode](https://img.shields.io/badge/qrcode-1.5.4-blue.svg) | [qrcode on npm](https://www.npmjs.com/package/qrcode) | `^1.5.4` |
 | ![dotenv](https://img.shields.io/badge/dotenv-16.5.0-brightgreen.svg) | [dotenv on npm](https://www.npmjs.com/package/dotenv) | `^16.5.0` |
 | ![express](https://img.shields.io/badge/express-5.1.0-lightgrey.svg) | [express on npm](https://www.npmjs.com/package/express) | `^5.1.0` |
+| ![cors](https://img.shields.io/badge/cors-2.8.5-lightgrey.svg) | [cors on npm](https://www.npmjs.com/package/cors) | `^2.8.5` |
 | ![mongoose](https://img.shields.io/badge/mongoose-8.13.2-orange.svg) | [mongoose on npm](https://www.npmjs.com/package/mongoose) | `^8.13.2` |
 
 ---
@@ -70,8 +71,8 @@
 **Body:**
 ```json
 {
-  "email": "<string>",
-  "password": "<string>"
+  "userId": "<string>",
+  "token": "<string>"
 }
 ```
 
