@@ -13,7 +13,7 @@
 
 ## 🌐 API Endpoints
 
-- ### `POST /api/item/:id`
+- ### `POST /api/item/get/:id`
 **Body:**
 ```json
 {
