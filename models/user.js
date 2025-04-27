@@ -16,6 +16,10 @@ class UserModel extends BaseModel {
     return await this.model.findOne({ email: email }).select('_id');
   }
 
+  async getUserEmailById(id) {
+    return await this.model.findOne({ _id: id }).select('email');
+  }
+
   async checkToken(userId, token) {
     if (token == '') return false;
 
@@ -39,7 +43,7 @@ class UserModel extends BaseModel {
   }
 
   async getTokenByEmail(email) {
-    const account = await this.model.findOne({email: email});
+    const account = await this.model.findOne({ email: email });
     return account.token;
   }
 

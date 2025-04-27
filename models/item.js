@@ -7,8 +7,8 @@ class ItmeModel extends BaseModel {
       { name: 'name', options: { type: String, required: true } },
       { name: 'owner', options: { type: String, required: true } },
       { name: 'isPrivate', options: { type: Boolean, default: false } },
-      { name: 'authorizedUsers', options: { type: [mongoose.Schema.Types.ObjectId], default: [], ref: 'User'} },
-      { name: 'authorizedCallenderUsers', options: { type: [mongoose.Schema.Types.ObjectId], default: [], ref: 'User' } },
+      { name: 'authorizedUsers', options: { type: [String], default: [] } },
+      { name: 'authorizedCallenderUsers', options: { type: [String], default: [] } },
       { name: 'callenderData', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
       { name: 'content', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
     ]);

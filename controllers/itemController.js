@@ -62,6 +62,7 @@ exports.getItemInfo = async (req, res) => {
 
     if (isOwner && isTokenValid) {
         // Ok
+        itemInfo = await replaceIds(itemInfo);
         return res.status(200).json({ item: itemInfo });
     }
 
@@ -152,5 +153,26 @@ const sanitizeInfo = (info) => {
     info.callenderData = '';
     info.authorizedCallenderUsers = '';
     info.authorizedUsers = '';
+    return info;
+}
+
+const replaceIds = async (info) => {
+    const authorizedUsersEmail = [];
+    const authorizedCallenderUsersEmail = [];
+
+    for (const id of [...info.authorizedUsers, ...info.authorizedCallenderUsers]) {
+        const email = await User.getUserEmailById(id);
+        if (email) {
+            if (info.authorizedUsers.includes(id)) {
+                authorizedUsersEmail.push(email.email);
+            } else {
+                authorizedCallenderUsersEmail.push(email.email);
+            }
+        }
+    }
+
+    info.authorizedUsers = authorizedUsersEmail;
+    info.authorizedCallenderUsers = authorizedCallenderUsersEmail;
+
     return info;
 }
