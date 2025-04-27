@@ -17,6 +17,6 @@ router.post('/getItems', controller.getOwnedItems);
 router.post('/create', controller.createItem);
 
 // Set Authorized users (for callender aswell)
-router.post('/setAuthorizedUsers', controller.updateAuthorizedUsers);
+router.post('/setAuthorizedUsers/:id', controller.updateAuthorizedUsers);
 
 module.exports = router;

@@ -28,7 +28,7 @@ exports.getQrCode = async (req, res) => {
         const qrData = `${process.env.FRONT_DOMAIN}/${process.env.FRONT_ITEM_ROUTE}/${itemId}`;
         const qrCode = await QrCode.toDataURL(qrData);
         // Ok
-        return res.status(200).json({qrCode});
+        return res.status(200).json({ qrCode });
     } catch (err) {
         // Internal Server Error
         return res.status(500).json({ message: 'Failed to generate QR code', error: err.message });
@@ -110,12 +110,21 @@ exports.createItem = async (req, res) => {
 exports.updateAuthorizedUsers = async (req, res) => {
     const itemId = req.params.id;
     const userId = req.body.userId || '';
+    const authorizedUsersFlat = req.body.authorizedUsers.flat(Infinity);
+    console.log(authorizedUsersFlat);
     let itemInfo = await Item.findById(itemId);
     let isForCallender = !!req.body.forCalender;
 
     if (!Array.isArray(req.body.authorizedUsers)) {
         // Bad Request
-        return res.status(400).json({ message: 'authorizedUsers was set incorectly. Check endpoint README.md' });
+        return res.status(400).json({ message: 'authorizedUsers was set incorectly. It should be flat array' });
+    }
+
+    let usersToSet = [];
+
+    for (const email of authorizedUsersFlat) {
+        const userId = await User.getUserIdByMail(email);
+        if (userId) usersToSet.push(userId._id);
     }
 
     if (!itemInfo) {
@@ -128,10 +137,12 @@ exports.updateAuthorizedUsers = async (req, res) => {
 
     if (isOwner && isTokenValid) {
         if (isForCallender) {
-            await Item.model.findByIdAndUpdate(itemId, { authorizedCallenderUsers: req.body.authorizedUsers });
+            await Item.replaceAuthorizedCallenderUsers(itemId, usersToSet);
+            // Ok
             return res.status(200).json({ message: "Authorized Callender users was updated" });
         }
-        await Item.model.findByIdAndUpdate(itemId, { authorizedUsers: req.body.authorizedUsers });
+        await Item.replaceAuthorizedUsers(itemId, usersToSet);
+        // Ok
         return res.status(200).json({ message: "Authorized users was updated" });
     }
 };
