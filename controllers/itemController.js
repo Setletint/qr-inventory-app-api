@@ -160,14 +160,17 @@ const replaceIds = async (info) => {
     const authorizedUsersEmail = [];
     const authorizedCallenderUsersEmail = [];
 
-    for (const id of [...info.authorizedUsers, ...info.authorizedCallenderUsers]) {
+    for (const id of info.authorizedUsers) {
         const email = await User.getUserEmailById(id);
         if (email) {
-            if (info.authorizedUsers.includes(id)) {
-                authorizedUsersEmail.push(email.email);
-            } else {
-                authorizedCallenderUsersEmail.push(email.email);
-            }
+            authorizedUsersEmail.push(email.email);
+        }
+    }
+
+    for (const id of info.authorizedCallenderUsers) {
+        const email = await User.getUserEmailById(id);
+        if (email) {
+            authorizedCallenderUsersEmail.push(email.email);
         }
     }
 
