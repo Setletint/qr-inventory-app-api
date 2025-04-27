@@ -1,6 +1,5 @@
 const Auth = require('../models/AuthAttempt');
 const User = require('../models/user')
-const bcrypt = require('bcrypt');
 
 const LOGIN_COOLDOWN = process.env.LOGIN_COOLDOWN || 10;
 
@@ -21,7 +20,7 @@ exports.login = async (req, res) => {
 
     if (attempts.attempts < 5) {
       if (await checkCredentials(req.body.email, req.body.password)) {
-        const token = await User.generateToken(req.body.email);
+        const token = await User.getTokenByEmail(req.body.email) || await User.generateToken(req.body.email);
         const userId = await User.getUserIdByMail(req.body.email);
         const username = await User.model.findOne({ email: req.body.email }).select('username -_id');
 

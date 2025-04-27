@@ -38,6 +38,11 @@ class UserModel extends BaseModel {
     return false;
   }
 
+  async getTokenByEmail(email) {
+    const account = await this.model.findOne({email: email});
+    return account.token;
+  }
+
   async generateToken(email) {
     let token;
     let isDuplicate = true;
