@@ -111,7 +111,7 @@ exports.updateAuthorizedUsers = async (req, res) => {
     const itemId = req.params.id;
     const userId = req.body.userId || '';
     const authorizedUsersFlat = req.body.authorizedUsers.flat(Infinity);
-    console.log(authorizedUsersFlat);
+
     let itemInfo = await Item.findById(itemId);
     let isForCallender = !!req.body.forCalender;
 
