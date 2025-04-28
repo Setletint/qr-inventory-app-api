@@ -8,6 +8,9 @@ const controller = require('../controllers/itemController');
 // Get item by id
 router.post('/get/:id', controller.getItemInfo);
 
+// Update item
+router.post('/update/:id', controller.updateItem);
+
 // Get item qrCode
 router.get('/getQrCode/:id', controller.getQrCode);
 
