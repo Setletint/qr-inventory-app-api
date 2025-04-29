@@ -41,7 +41,7 @@
   "token": "<string>",
   "name": "<string>",
   "isPrivate": "<Boolean>",
-  "callenderData": "<Object> || <String>",
+  "calendarData": "<Object> || <String>",
   "content": "<Mixed>"
 }
 ```
