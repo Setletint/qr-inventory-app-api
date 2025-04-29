@@ -50,7 +50,9 @@ exports.getOwnedItems = async (req, res) => {
 exports.getItemInfo = async (req, res) => {
     const itemId = req.params.id;
     const userId = req.body.userId || '';
-    let itemInfo = await Item.findById(itemId);
+    let itemInfo = await Item.model.findById(itemId).select(
+        '_id name owner isPrivate authorizedUsers authorizedCalendarUsers content'
+    );
 
     if (!itemInfo) {
         // Not Found
@@ -99,7 +101,7 @@ exports.createItem = async (req, res) => {
     const newItem = await Item.create({
         name: req.body.name,
         owner: req.body.userId,
-        callenderData: req.body.callenderData,
+        calendarData: req.body.calendarData,
         isPrivate: req.body.isPrivate,
         content: req.body.content
     });
@@ -174,10 +176,33 @@ exports.updateItem = async (req, res) => {
     }
 };
 
+exports.updateCalendar = async (req, res) => {
+    const itemId = req.params.id;
+    const userId = req.body.userId || '';
+
+    const itemInfo = await Item.model.findById(itemId).select('_id owner');
+
+    if (!itemInfo) {
+        return res.status(404).json({ message: 'Item not found' });
+    }
+
+    const isOwner = itemInfo.owner == userId;
+    const isTokenValid = await User.checkToken(userId, req.body.token);
+
+    if (isOwner && isTokenValid) {
+        await Item.model.findByIdAndUpdate(itemId, {
+            calendarData: req.body.calendarData
+        });
+
+        return res.json({ success: true, message: 'Item updated successfully.' });
+    } else {
+        return res.status(403).json({ message: 'Unauthorized or invalid token.' });
+    }
+}
+
 
 const sanitizeInfo = (info) => {
     info.owner = '';
-    info.callenderData = '';
     info.authorizedCalendarUsers = '';
     info.authorizedUsers = '';
     return info;

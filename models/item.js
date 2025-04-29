@@ -9,7 +9,7 @@ class ItmeModel extends BaseModel {
       { name: 'isPrivate', options: { type: Boolean, default: false } },
       { name: 'authorizedUsers', options: { type: [String], default: [] } },
       { name: 'authorizedCalendarUsers', options: { type: [String], default: [] } },
-      { name: 'callenderData', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
+      { name: 'calendarData', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
       { name: 'content', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
     ]);
   }

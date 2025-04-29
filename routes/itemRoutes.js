@@ -11,6 +11,9 @@ router.post('/get/:id', controller.getItemInfo);
 // Update item
 router.post('/update/:id', controller.updateItem);
 
+// Update calendar for item
+router.post('/updateCalendar/:id', controller.updateCalendar);
+
 // Get item qrCode
 router.get('/getQrCode/:id', controller.getQrCode);
 
