@@ -8,7 +8,7 @@ class ItmeModel extends BaseModel {
       { name: 'owner', options: { type: String, required: true } },
       { name: 'isPrivate', options: { type: Boolean, default: false } },
       { name: 'authorizedUsers', options: { type: [String], default: [] } },
-      { name: 'authorizedCallenderUsers', options: { type: [String], default: [] } },
+      { name: 'authorizedCalendarUsers', options: { type: [String], default: [] } },
       { name: 'callenderData', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
       { name: 'content', options: { type: mongoose.Schema.Types.Mixed, default: '' } },
     ]);
@@ -25,10 +25,10 @@ class ItmeModel extends BaseModel {
     );
   }
 
-  async appendAuthorizedCallenderUser(itemId, userId) {
+  async appendAuthorizedCalendarUser(itemId, userId) {
     return await this.model.updateOne(
       { _id: itemId },
-      { $push: { authorizedCallenderUsers: userId } }
+      { $push: { authorizedCalendarUsers: userId } }
     );
   }
 
@@ -39,10 +39,10 @@ class ItmeModel extends BaseModel {
     );
   }
 
-  async replaceAuthorizedCallenderUsers(itemId, usersArray) {
+  async replaceAuthorizedCalendarUsers(itemId, usersArray) {
     return await this.model.updateOne(
       { _id: itemId },
-      { $set: { authorizedCallenderUsers: usersArray } }
+      { $set: { authorizedCalendarUsers: usersArray } }
     );
   }
 }

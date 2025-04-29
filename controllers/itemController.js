@@ -138,7 +138,7 @@ exports.updateAuthorizedUsers = async (req, res) => {
 
     if (isOwner && isTokenValid) {
         if (isForCallender) {
-            await Item.replaceAuthorizedCallenderUsers(itemId, usersToSet);
+            await Item.replaceAuthorizedCalendarUsers(itemId, usersToSet);
             // Ok
             return res.status(200).json({ message: 'Authorized Callender users was updated' });
         }
@@ -178,14 +178,14 @@ exports.updateItem = async (req, res) => {
 const sanitizeInfo = (info) => {
     info.owner = '';
     info.callenderData = '';
-    info.authorizedCallenderUsers = '';
+    info.authorizedCalendarUsers = '';
     info.authorizedUsers = '';
     return info;
 }
 
 const replaceIds = async (info) => {
     const authorizedUsersEmail = [];
-    const authorizedCallenderUsersEmail = [];
+    const authorizedCalendarUsersEmail = [];
 
     for (const id of info.authorizedUsers) {
         const email = await User.getUserEmailById(id);
@@ -194,15 +194,15 @@ const replaceIds = async (info) => {
         }
     }
 
-    for (const id of info.authorizedCallenderUsers) {
+    for (const id of info.authorizedCalendarUsers) {
         const email = await User.getUserEmailById(id);
         if (email) {
-            authorizedCallenderUsersEmail.push(email.email);
+            authorizedCalendarUsersEmail.push(email.email);
         }
     }
 
     info.authorizedUsers = authorizedUsersEmail;
-    info.authorizedCallenderUsers = authorizedCallenderUsersEmail;
+    info.authorizedCalendarUsers = authorizedCalendarUsersEmail;
 
     return info;
 }
