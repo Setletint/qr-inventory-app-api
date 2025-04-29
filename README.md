@@ -46,6 +46,18 @@
 }
 ```
 
+- ### `POST /api/item/update/:id`
+**Body:**
+```json
+{
+  "userId": "<string>",
+  "token": "<string>",
+  "name": "<string>",
+  "isPrivate": "<Boolean>",
+  "content": "<Mixed>"
+}
+```
+ 
 - ### `POST /api/item/setAuthorizedUsers/:id`
 **Body:**
 ```json
