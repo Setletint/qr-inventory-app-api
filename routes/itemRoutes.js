@@ -12,13 +12,13 @@ router.post('/get/:id', controller.getItemInfo);
 router.post('/update/:id', controller.updateItem);
 
 // Add calendar event for item
-router.post('/item/:id/calendar', controller.addCalendar);
+router.post('/calendar/:id', controller.addCalendar);
 
 // Delete calendar event
-router.delete('/item/:id/calendar', controller.deleteCalendarEvent);
+router.delete('/calendar/:id', controller.deleteCalendarEvent);
 
 // Get calendar events
-router.get('/itme/:id/calendar', controller.getCalendar);
+router.get('/calendar/:id', controller.getCalendar);
 
 // Get item qrCode
 router.get('/getQrCode/:id', controller.getQrCode);
@@ -26,6 +26,7 @@ router.get('/getQrCode/:id', controller.getQrCode);
 // Get items user own
 router.post('/getItems', controller.getOwnedItems);
 
+// Create Item
 router.post('/create', controller.createItem);
 
 // Set Authorized users (for callender aswell)

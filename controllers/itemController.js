@@ -1,6 +1,8 @@
 const Item = require('../models/item');
 const User = require('../models/user');
 const QrCode = require('qrcode');
+const mongoose = require('mongoose');
+
 
 exports.getQrCode = async (req, res) => {
     const itemId = req.params.id;
@@ -193,6 +195,7 @@ exports.addCalendar = async (req, res) => {
     }
 
     event.id = new mongoose.Types.ObjectId().toString();
+    event.createdBy = userId;
     item.calendarData.events.push(event);
     await item.save();
 
