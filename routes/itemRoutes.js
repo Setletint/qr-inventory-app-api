@@ -11,8 +11,14 @@ router.post('/get/:id', controller.getItemInfo);
 // Update item
 router.post('/update/:id', controller.updateItem);
 
-// Update calendar for item
-router.post('/updateCalendar/:id', controller.updateCalendar);
+// Add calendar event for item
+router.post('/item/:id/calendar', controller.addCalendar);
+
+// Delete calendar event
+router.delete('/item/:id/calendar', controller.deleteCalendarEvent);
+
+// Get calendar events
+router.get('/itme/:id/calendar', controller.getCalendar);
 
 // Get item qrCode
 router.get('/getQrCode/:id', controller.getQrCode);

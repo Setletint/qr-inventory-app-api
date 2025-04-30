@@ -176,30 +176,72 @@ exports.updateItem = async (req, res) => {
     }
 };
 
-exports.updateCalendar = async (req, res) => {
+exports.addCalendar = async (req, res) => {
     const itemId = req.params.id;
-    const userId = req.body.userId || '';
+    const { userId, token, event } = req.body;
 
-    const itemInfo = await Item.model.findById(itemId).select('_id owner');
+    const item = await Item.model.findById(itemId);
+    if (!item) return res.status(404).json({ message: 'Item not found' });
 
-    if (!itemInfo) {
-        return res.status(404).json({ message: 'Item not found' });
+    const isAuthorized =
+        item.owner === userId ||
+        (item.authorizedCalendarUsers || []).includes(userId);
+    const isTokenValid = await User.checkToken(userId, token);
+
+    if (!isAuthorized || !isTokenValid) {
+        return res.status(403).json({ message: 'Unauthorized' });
     }
 
-    const isOwner = itemInfo.owner == userId;
-    const isTokenValid = await User.checkToken(userId, req.body.token);
+    event.id = new mongoose.Types.ObjectId().toString();
+    item.calendarData.events.push(event);
+    await item.save();
 
-    if (isOwner && isTokenValid) {
-        await Item.model.findByIdAndUpdate(itemId, {
-            calendarData: req.body.calendarData
-        });
+    return res.status(200).json({ message: 'Event added', event });
+};
 
-        return res.json({ success: true, message: 'Item updated successfully.' });
-    } else {
-        return res.status(403).json({ message: 'Unauthorized or invalid token.' });
+exports.deleteCalendarEvent = async (req, res) => {
+    const itemId = req.params.id;
+    const eventId = req.params.eventId;
+    const { userId, token } = req.body;
+
+    const item = await Item.model.findById(itemId).select('owner authorizedCalendarUsers');
+    if (!item) return res.status(404).json({ message: 'Item not found' });
+
+    const isAuthorized =
+        item.owner === userId ||
+        (item.authorizedCalendarUsers || []).includes(userId);
+    const isTokenValid = await User.checkToken(userId, token);
+
+    if (!isAuthorized || !isTokenValid) {
+        return res.status(403).json({ message: 'Unauthorized' });
     }
-}
 
+    await Item.model.updateOne(
+        { _id: itemId },
+        { $pull: { 'calendarData.events': { id: eventId } } }
+    );
+
+    return res.status(200).json({ message: 'Event deleted' });
+};
+
+exports.getCalendar = async (req, res) => {
+    const itemId = req.params.id;
+    const { userId, token } = req.body;
+
+    const item = await Item.model.findById(itemId).select('calendarData owner authorizedCalendarUsers');
+    if (!item) return res.status(404).json({ message: 'Item not found' });
+
+    const isAuthorized =
+        item.owner === userId ||
+        (item.authorizedCalendarUsers || []).includes(userId);
+    const isTokenValid = await User.checkToken(userId, token);
+
+    if (!isAuthorized || !isTokenValid) {
+        return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    return res.status(200).json({ events: item.calendarData.events || [] });
+};
 
 const sanitizeInfo = (info) => {
     info.owner = '';
