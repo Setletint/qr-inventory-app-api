@@ -18,7 +18,7 @@ router.post('/calendar/:id', controller.addCalendar);
 router.delete('/calendar/:id', controller.deleteCalendarEvent);
 
 // Get calendar events
-router.get('/calendar/:id', controller.getCalendar);
+router.post('/getCalendar/:id', controller.getCalendar);
 
 // Get item qrCode
 router.get('/getQrCode/:id', controller.getQrCode);
