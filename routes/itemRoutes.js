@@ -15,7 +15,7 @@ router.post('/update/:id', controller.updateItem);
 router.post('/calendar/:id', controller.addCalendar);
 
 // Delete calendar event
-router.delete('/calendar/:id', controller.deleteCalendarEvent);
+router.delete('/calendar/:id/:eventId', controller.deleteCalendarEvent);
 
 // Get calendar events
 router.post('/getCalendar/:id', controller.getCalendar);

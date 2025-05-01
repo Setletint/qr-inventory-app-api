@@ -78,7 +78,7 @@ exports.getItemInfo = async (req, res) => {
 
         const localUser = await User.findById(userId);
 
-        if (localUser && itemInfo.includes(localUser.email) && isTokenValid) {
+        if (localUser && itemInfo.authorizedUsers.includes(userId) && isTokenValid) {
             const sanitized = sanitizeInfo(itemInfo);
             // Ok
             return res.status(200).json({ item: sanitized });
