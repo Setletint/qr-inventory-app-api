@@ -1,10 +1,8 @@
-// Dotenv init
 const dotenv = require('dotenv');
 dotenv.config();
 
 const cors = require('cors');
 
-//import cors from 'cors';
 const express = require('express');
 const connectDB = require('./db/connect');
 const {sanitizeMiddleware} = require('./tools/tools');

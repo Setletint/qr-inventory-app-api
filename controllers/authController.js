@@ -1,4 +1,4 @@
-const Auth = require('../models/AuthAttempt');
+const Auth = require('../models/authAttempt');
 const User = require('../models/user')
 
 const LOGIN_COOLDOWN = process.env.LOGIN_COOLDOWN || 10;
