@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
     const currentTime = new Date();
 
     if (((Math.abs(currentTime - lastAttempt) / (1000 * 60)) > LOGIN_COOLDOWN)) {
-      Auth.clearAttempts(attemptId);
+      await Auth.clearAttempts(attemptId);
     }
 
     if (attempts.attempts < 5) {
