@@ -2,7 +2,7 @@
 
 | Package | Link | Version |
 |--------|------|---------|
-| ![bcrypt](https://img.shields.io/badge/bcrypt-5.1.1-blue.svg) | [bcrypt on npm](https://www.npmjs.com/package/bcrypt) | `^5.1.1` |
+| ![bcrypt](https://img.shields.io/badge/bcrypt-6.0.0-blue.svg) | [bcrypt on npm](https://www.npmjs.com/package/bcrypt) | `^5.1.1` |
 | ![qrcode](https://img.shields.io/badge/qrcode-1.5.4-blue.svg) | [qrcode on npm](https://www.npmjs.com/package/qrcode) | `^1.5.4` |
 | ![dotenv](https://img.shields.io/badge/dotenv-16.5.0-brightgreen.svg) | [dotenv on npm](https://www.npmjs.com/package/dotenv) | `^16.5.0` |
 | ![express](https://img.shields.io/badge/express-5.1.0-lightgrey.svg) | [express on npm](https://www.npmjs.com/package/express) | `^5.1.0` |
