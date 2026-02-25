@@ -6,7 +6,7 @@
     "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Setletint",
   "license": "ISC",
   "description": "",
   "dependencies": {
